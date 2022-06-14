@@ -39,34 +39,34 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'graph_app',
-    'graph_app_two',
+    # 'graph_app_two',
     'graphene_django',
-    'graphql_jwt.refresh_token.apps.RefreshTokenConfig'
+    # 'graphql_jwt.refresh_token.apps.RefreshTokenConfig'
 ]
 
-AUTH_USER_MODEL = "graph_app.ApiClient"
+# AUTH_USER_MODEL = "graph_app.ApiClient"
 
-AUTHENTICATION_BACKENDS = [
-    'graphql_jwt.backends.JSONWebTokenBackend',
-    'django.contrib.auth.backends.ModelBackend'
-]
+# AUTHENTICATION_BACKENDS = [
+#     'graphql_jwt.backends.JSONWebTokenBackend',
+#     'django.contrib.auth.backends.ModelBackend'
+# ]
 
 GRAPHENE = {
-    "SCHEMA": 'schema.schema',
-    "MIDDLEWARE": [
-        "graphql_jwt.middleware.JSONWebTokenMiddleware"
-    ]
+    "SCHEMA": 'graph_app.schema.schema',
+    # "MIDDLEWARE": [
+        # "graphql_jwt.middleware.JSONWebTokenMiddleware"
+    # ]
 }
 
-GRAPHQL_JWT = {
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-    'JWT_VERIFY_EXPIRATION': True,
-    'JWT_LONG_RUNNING_REFRESH_TOKEN': True,
-    'JWT_EXPIRATION_DELTA': timedelta(days=1),
-    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
-    'JWT_SECRET_KEY': SECRET_KEY,
-    'JWT_ALGORITHM': 'HS256',
-}
+# GRAPHQL_JWT = {
+#     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+#     'JWT_VERIFY_EXPIRATION': True,
+#     'JWT_LONG_RUNNING_REFRESH_TOKEN': True,
+#     'JWT_EXPIRATION_DELTA': timedelta(days=1),
+#     'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
+#     'JWT_SECRET_KEY': SECRET_KEY,
+#     'JWT_ALGORITHM': 'HS256',
+# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
