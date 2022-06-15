@@ -17,6 +17,12 @@ class MakeType(DjangoObjectType):
         fields = ("id", "name")     # можно не указывать, если используются все поля
 
 
+class ModelType(DjangoObjectType):
+    class Meta:
+        model = Model
+        fields = ("id", "name")
+
+
 class CarType(DjangoObjectType):
     class Meta:
         model = Car
@@ -30,15 +36,24 @@ class Query(graphene.ObjectType):
 #
     make = graphene.Field(MakeType, id=graphene.Int())
     makes = graphene.List(MakeType)     # получить всех производителей
-#
-#     api_client = graphene.Field(UserType)
-#     api_clients = graphene.List(UserType)
-#
-#     model = graphene.Field(ModelType, id=graphene.Int())
+
+    model = graphene.Field(ModelType, id=graphene.Int())
+
     car = graphene.Field(CarType, id=graphene.Int())
     cars = graphene.List(CarType)       # получить все описания машин
 
+    # api_client = graphene.Field(UserType)
+    # api_clients = graphene.List(UserType)
+
     # добавляем распознаватели
+    def resolve_make(self, info, **kwargs):
+        id = kwargs.get('id', None)
+
+        try:
+            return Make.objects.get(id=id)
+        except Make.DoesNotExist:
+            return None
+
     def resolve_model(self, info, **kwargs):
         id = kwargs.get('id', None)
 
@@ -46,14 +61,6 @@ class Query(graphene.ObjectType):
             # возвращаем ответ в соответствии с id, полученным из kwargs
             return Model.objects.get(id=id)
         except Model.DoesNotExist:
-            return None
-
-    def resolve_make(self, info, **kwargs):
-        id = kwargs.get('id', None)
-
-        try:
-            return Make.objects.get(id=id)
-        except Make.DoesNotExist:
             return None
 
     def resolve_car(self, info, **kwargs):
