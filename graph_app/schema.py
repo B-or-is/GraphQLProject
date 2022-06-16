@@ -2,7 +2,7 @@ import graphene
 from graphene_django import DjangoObjectType
 
 # from django.contrib.auth import get_user_model
-# from graphene_django.filter import DjangoFilterConnectionField
+from graphene_django.filter import DjangoFilterConnectionField      # при использовании фильтров
 
 # создаем типы для наших моделей, для этого импортируем модели
 from .models import Car, Make, Model
@@ -15,6 +15,10 @@ class MakeType(DjangoObjectType):
         # указываем модель и поля модели
         model = Make
         fields = ("id", "name")     # можно не указывать, если используются все поля
+        # фильтр для поиска не только по id, но и по заданным полям
+        # filter_fields = ('name', 'id')
+        filter_fields = {'name': ['exact', 'icontains', 'istartswith']}
+        interfaces = (graphene.relay.Node,)
 
 
 class ModelType(DjangoObjectType):
@@ -31,11 +35,15 @@ class CarType(DjangoObjectType):
 
 # создаем класс запросов (можно вынести в отдельный файл)
 class Query(graphene.ObjectType):
-#     make = graphene.relay.Node.Field(MakeType, id=graphene.Int())
-#     makes = DjangoFilterConnectionField(MakeType)
-#
-    make = graphene.Field(MakeType, id=graphene.Int())
-    makes = graphene.List(MakeType)     # получить всех производителей
+
+    # make = graphene.Field(MakeType, id=graphene.Int())
+    # makes = graphene.List(MakeType)     # получить всех производителей
+
+    # для использования фильтров меняем вышеуказанные переменные make и makes
+    # make = graphene.relay.Node.Field(MakeType, id=graphene.Int()) # показывает ошибку с id
+    make = graphene.relay.Node.Field(MakeType)
+    makes = DjangoFilterConnectionField(MakeType)
+
 
     model = graphene.Field(ModelType, id=graphene.Int())
 
