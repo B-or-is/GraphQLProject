@@ -52,8 +52,9 @@ INSTALLED_APPS = [
 # ]
 
 GRAPHENE = {
-    "SCHEMA": 'graph_app.schema.schema',
-    # "MIDDLEWARE": [
+    # "SCHEMA": 'graph_app.schema.schema',    # для подключения конкретной схемы приложения
+    "SCHEMA": 'schema.schema',              # для подключения схемы проекта (тогда схемы приложений не подключаются)
+        # "MIDDLEWARE": [
         # "graphql_jwt.middleware.JSONWebTokenMiddleware"
     # ]
 }

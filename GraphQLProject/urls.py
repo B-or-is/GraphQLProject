@@ -18,7 +18,8 @@ from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
 from graphene_django.views import GraphQLView
-from graph_app.schema import scheme     # указываем импорт конкретной схемы
+# from graph_app.schema import scheme       # указываем импорт конкретной схемы
+from .schema import scheme                   # указываем импорт конкретной схемы
 
 urlpatterns = [
     path('admin/', admin.site.urls),
