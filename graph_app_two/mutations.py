@@ -7,11 +7,12 @@ from graph_app.models import Make
 
 
 class MakeInput(graphene.InputObjectType):
-    # поля, которые ожидаются от пользователя
+    # поля, которые пользователь будет вводить (здесь – name)
     id = graphene.ID()
     name = graphene.String()
 
 
+# создание мутации
 class CreateMake(graphene.Mutation):
     class Arguments:
         # записываются аргументы, которые нужны для разрешения мутации
@@ -21,37 +22,39 @@ class CreateMake(graphene.Mutation):
     ok = graphene.Boolean()
     make = graphene.Field(MakeType)
 
-    # функция, которая будет применена после вызова мутации.
+    # обязательный метод, который будет применен после вызова мутации.
     # Этот метод — всего лишь специальный преобразователь, в котором мы можем изменять данные.
     # Он принимает те же аргументы, что и стандартный запрос Resolver Parameters.
     # @classmethod
     def mutate(self, info, input=None):
         ok = True
+        # создаем объект
         make_instance = Make.objects.create(name=input)
-        print(make_instance)
+        # возвращаем этот же объект класса CreateMake
         return CreateMake(ok=ok, make=make_instance)
 
 
-# class UpdateMake(graphene.Mutation):
-#     class Arguments:
-#         id = graphene.Int(required=True)
-#         input = MakeInput(required=True)
-#
-#     ok = graphene.Boolean()
-#     make = graphene.Field(MakeType)
-#
-#     @classmethod
-    # def mutate(cls, info, id, input=None):
-    #     ok = False
-    #     try:
-    #         make_instance = Make.objects.get(pk=id)
-    #     except Make.DoesNotExist:
-    #         return cls(ok=ok, make=None)
-    #
-    #     ok = True
-    #     make_instance.name = input.name
-    #     make_instance.save()
-    #     return cls(ok=ok, make=make_instance)
+# мутация для изменения объекта (копируем CreateMake и вносим изменения)
+class UpdateMake(graphene.Mutation):
+    class Arguments:
+        id = graphene.Int(required=True)    # добавляем поле id (нужно знать изменяемый элемент)
+        input = MakeInput(required=True)
+
+    ok = graphene.Boolean()
+    make = graphene.Field(MakeType)
+
+    @classmethod
+    def mutate(cls, info, id, input=None):  # добавляем поле id
+        ok = False                          # меняем по умолчанию на False
+        try:                                # добавляем на случай, если не получим id
+            make_instance = Make.objects.get(pk=id)  # получаем объект по id
+        except Make.DoesNotExist:
+            return UpdateMake(ok=ok, make=None)
+
+        ok = True
+        make_instance.name = input.name     # меняем значение поля на input.name
+        make_instance.save()                # сохраняем новое значение
+        return UpdateMake(ok=ok, make=make_instance)
 
 
 # class DeleteMake(graphene.Mutation):
@@ -93,7 +96,8 @@ class CreateMake(graphene.Mutation):
 
 
 class Mutation(graphene.ObjectType):
+    # подключаем название, указываем мутации
     create_make = CreateMake.Field()
-    # update_make = UpdateMake.Field()
+    update_make = UpdateMake.Field()
     # delete_make = DeleteMake.Field()
     # create_user = CreateUser.Field()
