@@ -43,7 +43,7 @@ class UpdateMake(graphene.Mutation):
     ok = graphene.Boolean()
     make = graphene.Field(MakeType)
 
-    @classmethod
+    # @classmethod
     def mutate(cls, info, id, input=None):  # добавляем поле id
         ok = False                          # меняем по умолчанию на False
         try:                                # добавляем на случай, если не получим id
