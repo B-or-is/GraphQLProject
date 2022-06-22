@@ -43,34 +43,35 @@ class UpdateMake(graphene.Mutation):
     ok = graphene.Boolean()
     make = graphene.Field(MakeType)
 
-    # @classmethod
-    def mutate(cls, info, id, input=None):  # добавляем поле id
+    @classmethod
+    def mutate(cls, root, info, id, input=None):  # добавляем поле id
         ok = False                          # меняем по умолчанию на False
         try:                                # добавляем на случай, если не получим id
             make_instance = Make.objects.get(pk=id)  # получаем объект по id
         except Make.DoesNotExist:
-            return UpdateMake(ok=ok, make=None)
+            return cls(ok=ok, make=None)
 
         ok = True
         make_instance.name = input.name     # меняем значение поля на input.name
         make_instance.save()                # сохраняем новое значение
-        return UpdateMake(ok=ok, make=make_instance)
+        return cls(ok=ok, make=make_instance)
 
 
-# class DeleteMake(graphene.Mutation):
-#     class Arguments:
-#         id = graphene.Int(required=True)
-#
-#     ok = graphene.Boolean()
-#
-#     @classmethod
-#     def mutate(cls, root, info, id):
-#         try:
-#             make_instance = Make.objects.get(pk=id)
-#             make_instance.delete()
-#             return cls(ok=True)
-#         except Make.DoesNotExist:
-#             return cls(ok=True)
+# мутация для изменения объекта (копируем CreateMake и вносим изменения)
+class DeleteMake(graphene.Mutation):
+    class Arguments:
+        id = graphene.Int(required=True)
+
+    ok = graphene.Boolean()
+
+    @classmethod
+    def mutate(cls, root, info, id):
+        try:
+            make_instance = Make.objects.get(pk=id)
+            make_instance.delete()
+            return cls(ok=True)
+        except Make.DoesNotExist:
+            return cls(ok=True)
 
 
 # class CreateUser(graphene.Mutation):
@@ -99,5 +100,5 @@ class Mutation(graphene.ObjectType):
     # подключаем название, указываем мутации
     create_make = CreateMake.Field()
     update_make = UpdateMake.Field()
-    # delete_make = DeleteMake.Field()
+    delete_make = DeleteMake.Field()
     # create_user = CreateUser.Field()
