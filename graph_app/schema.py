@@ -1,7 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 
-# from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model
 from graphene_django.filter import DjangoFilterConnectionField      # при использовании фильтров
 
 # создаем типы для наших моделей, для этого импортируем модели

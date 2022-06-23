@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     # 'graphql_jwt.refresh_token.apps.RefreshTokenConfig'
 ]
 
-# AUTH_USER_MODEL = "graph_app.ApiClient"
+AUTH_USER_MODEL = "graph_app.ApiClient"
 
 # AUTHENTICATION_BACKENDS = [
 #     'graphql_jwt.backends.JSONWebTokenBackend',

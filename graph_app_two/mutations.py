@@ -1,5 +1,5 @@
 import graphene
-from django.contrib.auth import get_user_model
+# from django.contrib.auth import get_user_model
 # from graphql_jwt.shortcuts import create_refresh_token, get_token
 
 from graph_app.types import MakeType, UserType
