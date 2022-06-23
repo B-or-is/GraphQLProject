@@ -25,8 +25,8 @@ class CreateMake(graphene.Mutation):
     # обязательный метод, который будет применен после вызова мутации.
     # Этот метод — всего лишь специальный преобразователь, в котором мы можем изменять данные.
     # Он принимает те же аргументы, что и стандартный запрос Resolver Parameters.
-    # @classmethod
-    def mutate(self, info, input=None):
+    @classmethod
+    def mutate(self, root, info, input=None):
         ok = True
         # создаем объект
         make_instance = Make.objects.create(name=input)
