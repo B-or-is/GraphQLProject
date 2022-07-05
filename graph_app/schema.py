@@ -26,8 +26,8 @@ class Query(graphene.ObjectType):
     car = graphene.Field(CarType, id=graphene.Int())
     cars = graphene.List(CarType)       # получить все описания машин
 
-    # api_client = graphene.Field(UserType)
-    # api_clients = graphene.List(UserType)
+    api_client = graphene.Field(UserType)
+    api_clients = graphene.List(UserType)
 
     # добавляем распознаватели
     def resolve_make(self, info, **kwargs):
@@ -61,21 +61,21 @@ class Query(graphene.ObjectType):
     def resolve_cars(self, info, **kwargs):
         return Car.objects.all()
 
-#     def resolve_api_client(self, info):
-#         user = info.context.user
-#
-#         if user.is_anonymous:
-#             raise Exception('Authentication Failure: Your must be signed in')
-#         return user
-#
-#     def resolve_api_clients(self, info):
-#         user = info.context.user
-#
-#         if user.is_anonymous:
-#             raise Exception('Authentication Failure: Your must be signed in')
-#         if not user.is_staff:
-#             raise Exception('Authentication Failure: Must be Manager')
-#         return get_user_model().objects.all()
+    def resolve_api_client(self, info):
+        user = info.context.user
+
+        if user.is_anonymous:   # пользователь не существует
+            raise Exception('Authentication Failure: Your must be signed in')
+        return user
+
+    def resolve_api_clients(self, info):
+        user = info.context.user
+
+        if user.is_anonymous:
+            raise Exception('Authentication Failure: Your must be signed in')
+        if not user.is_staff:
+            raise Exception('Authentication Failure: Must be Manager')
+        return get_user_model().objects.all()
 
 
 # подключаемся к главной схеме

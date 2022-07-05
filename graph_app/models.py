@@ -12,6 +12,7 @@ class ApiClient(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+    # Кастомный менеджер см. managers.py
     objects = UserManager()
 
     # переопределяем для возврата email вместо username

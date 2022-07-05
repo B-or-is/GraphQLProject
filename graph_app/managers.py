@@ -1,6 +1,7 @@
 from django.contrib.auth.models import BaseUserManager
 
 
+# Кастомный менеджер (удалено поле username, используется поле email)
 class UserManager(BaseUserManager):
     """Define a model manager for User model with no username field."""
 
