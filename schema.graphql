@@ -1,0 +1,84 @@
+query TestQuery {
+  car(id: 1) {
+    id
+    licensePlate
+    make {
+      name
+    }
+    model {
+      name
+    }
+  }
+  makes {
+    edges {
+      node {
+        name
+      }
+    }
+  }
+  cars {
+    licensePlate
+    id
+  }
+}
+
+mutation TestCreateMutation {
+  createMake(input: {name: "BMW"}) {
+    ok
+    make {
+      id
+      name
+    }
+  }
+}
+
+mutation TestUpdateMutation {
+  updateMake(id: 3, input: {name: "Volvo Test"}) {
+    ok
+    make {
+      id
+      name
+    }
+  }
+}
+
+mutation TestDeleteMutation {
+  deleteMake(id: 5) {
+    ok
+  }
+}
+
+query userList {
+  apiClients {
+    email
+  }
+}
+
+mutation createUser {
+  createUser(password: "admin", email: "test4@bbb.bb") {
+    refreshToken
+    token
+    user {
+      email
+      password
+      firstName
+      lastName
+      isStaff
+      isActive
+      isSuperuser
+    }
+  }
+}
+
+mutation verifyToken {
+  verifyToken(token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3Q0QGJiYi5iYiIsImV4cCI6MTY1NzE5Nzg4Nywib3JpZ0lhdCI6MTY1NzExMTQ4N30.i0QD36A-902wuJ5NWw_XavqcuEjvwEBHvklH6AONBGo") {
+    payload
+  }
+}
+
+mutation loginUser {
+  tokenAuth(email: "test4@bbb.bb", password: "admin") {
+    token
+    refreshToken
+  }
+}
